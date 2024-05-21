@@ -52,7 +52,7 @@ public class Block {
                 blockLocation[1] = new int[]{4, 1};
                 blockLocation[2] = new int[]{5, 1};
                 blockLocation[3] = new int[]{6, 1};
-                blockColor = new Color(Color.ORANGE.getRGB());//L2 Block
+                blockColor = new Color((int)255,(int)124,(int)4);//L2 Block
             }
             case 3 -> {
                 blockLocation[0] = new int[]{4, 0};
