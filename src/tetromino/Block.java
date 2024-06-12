@@ -13,6 +13,7 @@ public class Block {
     public int blockRotation;
     public int[][] blockLocation;
     public Color blockColor;
+    private boolean paused;
 
     /**
      * main.Block(int newBlockType)
@@ -23,6 +24,7 @@ public class Block {
         blockType = newBlockType;
         blockRotation = 0;
         setNewBlockLocationAndColor(newBlockType);
+        paused = false;
     }
 
     /**
@@ -92,8 +94,10 @@ public class Block {
      * Moves the block location down
      */
     public void moveBlockDown() {
-        for (int i = 0; i < 4; i++) {
-            blockLocation[i][1]++;
+        if (!paused) {
+            for (int i = 0; i < 4; i++) {
+                blockLocation[i][1]++;
+            }
         }
     }
 
@@ -102,8 +106,10 @@ public class Block {
      * Moves the block location left
      */
     public void moveBlockLeft() {
-        for (int i = 0; i < 4; i++) {
-            blockLocation[i][0]--;
+        if (!paused) {
+            for (int i = 0; i < 4; i++) {
+                blockLocation[i][0]--;
+            }
         }
     }
 
@@ -112,8 +118,10 @@ public class Block {
      * Moves the blocks location right
      */
     public void moveBlockRight() {
-        for (int i = 0; i < 4; i++) {
-            blockLocation[i][0]++;
+        if (!paused) {
+            for (int i = 0; i < 4; i++) {
+                blockLocation[i][0]++;
+            }
         }
     }
 

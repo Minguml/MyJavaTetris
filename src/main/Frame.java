@@ -13,8 +13,6 @@ import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Class: main.Frame
- * Author: Yannis Seimenis
  * Description: main.Frame class controls all visual aspects of the game.
  * TODO - BUGS:
  * - contentPane width/height different on laptop and desktop! (Make dynamic?)
@@ -60,6 +58,8 @@ public class Frame {
 
     private boolean animateTitle = true;
 
+    Sound sound = new Sound(); //SE
+
     private final Game game;
 
     /**
@@ -91,6 +91,11 @@ public class Frame {
     }
 
     //region Initialisation Methods
+
+    public void playMusicSE(int i) {
+        sound.setFile(i);
+        sound.play();
+    }
 
     /**
      * initFrame()
@@ -583,7 +588,13 @@ public class Frame {
         @Override
         public void keyPressed(KeyEvent e) {
             int code = e.getKeyCode();
-            if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
+
+            if (pauseCoverPanel.isVisible()) {
+                if (code == KeyEvent.VK_UP || code == KeyEvent.VK_DOWN
+                        || code == KeyEvent.VK_LEFT || code == KeyEvent.VK_RIGHT) {
+                    e.consume();
+                }
+            } else if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
                 game.moveSide(0);
                 updateCurrentBlock(false);
             } else if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
@@ -829,12 +840,14 @@ public class Frame {
             game.setRunning(false);
             blockGravityThread.interrupt();
             pauseCoverPanel.setVisible(true);
+
         } else {
             game.setRunning(true);
             gravity();
             pauseCoverPanel.setVisible(false);
         }
     }
+
 
     /**
      * resetGame()

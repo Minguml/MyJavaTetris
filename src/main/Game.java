@@ -10,9 +10,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Class: main.Game
- * Author: Yannis Seimenis
- * Description: main.Game method is used to store game variables and control game logic.
+ * main.Game method is used to store game variables and control game logic.
  */
 
 public class Game {
@@ -36,6 +34,8 @@ public class Game {
     private boolean running = false;
 
     private final ArrayList<int[]> setBlocks;
+
+    private Sound sound = new Sound();
 
     /**
      * main.Game()
@@ -288,6 +288,8 @@ public class Game {
     public void rotateBlock() {
         int[][] rotateLoc = new int[4][2];
         int newBlockRotation = 0;
+        sound.setFile(0);
+        sound.play();
         switch (currentBlock.getBlockType()) {
             case 0 -> {
                 if (currentBlock.getBlockRotation() == 0) {
@@ -511,6 +513,8 @@ public class Game {
             updatePreviousBlockPos();
             currentBlock.setNewLocation(rotateLoc);
             currentBlock.setBlockRotation(newBlockRotation);
+
+//            Sound.playSound("changePosition.wav");
         }
     }
 
