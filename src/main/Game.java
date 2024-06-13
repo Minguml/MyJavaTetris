@@ -37,6 +37,8 @@ public class Game {
 
     private Sound sound = new Sound();
 
+
+
     /**
      * main.Game()
      * main.Game constructor, initialises game variables
@@ -134,6 +136,8 @@ public class Game {
         return false;
     }
 
+
+
     /**
      * moveBlockDown()
      * Moves the current block down by calling block method
@@ -146,6 +150,7 @@ public class Game {
      * addToSetBlock()
      * Adds the current position of stationary block to the setBlock arrayList
      */
+
     public void addCurrentToSetBlock() {
         for (int i = 0; i < 4; i++) {
             setBlocks.add(new int[]{currentBlock.getBlockLocation()[i][0], currentBlock.getBlockLocation()[i][1]});
@@ -279,6 +284,47 @@ public class Game {
             }
         }
         return false;
+    }
+
+    public void hardDrop() {
+        currentBlock.hardDrop(getBoardMatrix());
+        // Add the dropped block to set blocks
+        addCurrentToSetBlock();
+        // Check for full rows and handle scoring
+        ArrayList<Integer> fullRows = checkForFullRows();
+        if (!fullRows.isEmpty()) {
+            removeFullRows(fullRows);
+        }
+        // Get the next block
+        nextBlock();
+    }
+
+    public void removeFullRows(ArrayList<Integer> fullRows) {
+        // Sort the rows in descending order to avoid shifting problems
+        fullRows.sort((a, b) -> b - a);
+
+        for (int row : fullRows) {
+            // Remove all blocks in the full row
+            setBlocks.removeIf(block -> block[1] == row);
+
+            // Move all blocks above this row down by one
+            for (int[] block : setBlocks) {
+                if (block[1] < row) {
+                    block[1]++;
+                }
+            }
+        }
+
+        clearedLines += fullRows.size();
+        totalLines += fullRows.size();
+    }
+
+    private int[][] getBoardMatrix() {
+        int[][] boardMatrix = new int[10][20]; // Adjust dimensions as necessary
+        for (int[] setBlock : setBlocks) {
+            boardMatrix[setBlock[0]][setBlock[1]] = 1;
+        }
+        return boardMatrix;
     }
 
     /**
@@ -659,6 +705,8 @@ public class Game {
     }
 
     public void clearSetBlocks() {
+        sound.setFile(4);
+        sound.play();
         setBlocks.clear();
     }
 

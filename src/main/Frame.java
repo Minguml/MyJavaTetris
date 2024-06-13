@@ -595,12 +595,18 @@ public class Frame {
                     e.consume();
                 }
             } else if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
+                sound.setFile(0);
+                sound.play();
                 game.moveSide(0);
                 updateCurrentBlock(false);
             } else if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
+                sound.setFile(0);
+                sound.play();
                 game.moveSide(1);
                 updateCurrentBlock(false);
             } else if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+                sound.setFile(2);
+                sound.play();
                 game.setFastFall(true);
             } else if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 game.rotateBlock();
@@ -609,7 +615,11 @@ public class Frame {
                 holdBlock();
             } else if (code == KeyEvent.VK_ESCAPE) {
                 pauseGame();
+            } else if (code == KeyEvent.VK_SPACE) {
+
+
             }
+
         }
 
         @Override
@@ -669,7 +679,8 @@ public class Frame {
                         }
                     } catch (InterruptedException ignored) {
                     }
-                } else {
+                }
+                else {
                     game.addCurrentToSetBlock();
                     removeRows(game.checkForFullRows());
                     updateScoreLabel();
@@ -682,15 +693,19 @@ public class Frame {
                         updateCurrentBlock(true);
                     } else {
                         blockGravityThread.interrupt();
+                        sound.stop();
+                        sound.stopSpecificClip(5);
                         gameOverAnimation();
                         game.checkIfHighScore();
                         showGameOverMessage();
                     }
                 }
+
             }
         });
         blockGravityThread.start();
     }
+
 
     /**
      * showGameOverMessage()
@@ -731,6 +746,8 @@ public class Frame {
      * @param rowsToRemove - ArrayList of rows (y coordinate) to remove
      */
     private void removeRows(ArrayList<Integer> rowsToRemove) {
+        sound.setFile(3);
+        sound.play();
         //Clear line animation
         for (Integer i : rowsToRemove) {
             int green = 250;
@@ -766,7 +783,6 @@ public class Frame {
             Color[][] gridColors = new Color[10][i];
             for (int j = 0; j < i; j++) {
                 for (int k = 0; k < 10; k++) {
-                    //COPY
                     gridColors[k][j] = gameGrid[k][j].getBackground();
                     //REMOVE
                     gameGrid[k][j].setBackground(Color.WHITE);
@@ -840,7 +856,6 @@ public class Frame {
             game.setRunning(false);
             blockGravityThread.interrupt();
             pauseCoverPanel.setVisible(true);
-
         } else {
             game.setRunning(true);
             gravity();
