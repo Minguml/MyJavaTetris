@@ -13,11 +13,7 @@ import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Class: main.Frame
- * Author: Yannis Seimenis
- * Description: main.Frame class controls all visual aspects of the game.
- * TODO - BUGS:
- * - contentPane width/height different on laptop and desktop! (Make dynamic?)
+ * - contentPane width/height different on laptop and desktop!
  * - Queue shows first block when game started
  */
 
@@ -25,7 +21,7 @@ public class Frame {
     /**
      * Global variables
      */
-    private JFrame jFrame;
+    private JFrame jFrame;//Game Window
 
     private JPanel startPanel;
     private JPanel gamePanel;
@@ -85,8 +81,6 @@ public class Frame {
         initQueuePanel();
         initHoldPanel();
 
-        initFrameBackground();
-
         jFrame.setVisible(true);
     }
 
@@ -104,7 +98,7 @@ public class Frame {
         jFrame.setSize(418, 561);
         jFrame.addKeyListener(keyListener);
         jFrame.setLocationRelativeTo(null);
-
+        jFrame.getContentPane().setBackground(Color.BLACK);
     }
 
     /**
@@ -125,15 +119,15 @@ public class Frame {
      * initFrameBackground()
      * Initialises label containing background image
      */
-    private void initFrameBackground() {
-        try {
-            backgroundLabel = new JLabel(new ImageIcon(ImageIO.read(new File("assets/background.png"))));
-            backgroundLabel.setBounds(0,0, 402, 522);
-            jFrame.add(backgroundLabel);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void initFrameBackground() {
+//        try {
+//            backgroundLabel = new JLabel(new ImageIcon(ImageIO.read(new File("assets/background.png"))));
+//            backgroundLabel.setBounds(0,0, 402, 522);
+//            jFrame.add(backgroundLabel);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * initStartPanel()
@@ -160,12 +154,6 @@ public class Frame {
         startGameLabel.setForeground(Color.WHITE);
         startPanel.add(startGameLabel);
 
-//        JLabel switchThemeLabel = new JLabel("Switch Theme");
-//        switchThemeLabel.setFont(pixelFont);
-//        switchThemeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        switchThemeLabel.setFont(pixelFont.deriveFont(40f));
-//        startPanel.add(switchThemeLabel);
-
         jFrame.add(startPanel);
 
         startGameLabel.addMouseListener(new MouseAdapter() {
@@ -188,26 +176,9 @@ public class Frame {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                startGameLabel.setForeground(new Color(51, 51, 51));
+                startGameLabel.setForeground(Color.WHITE);
             }
         });
-
-//        switchThemeLabel.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                changeBackgroundImage();
-//            }
-//
-//            @Override
-//            public void mouseEntered(MouseEvent e) {
-//                switchThemeLabel.setForeground(Color.WHITE);
-//            }
-//
-//            @Override
-//            public void mouseExited(MouseEvent e) {
-//                switchThemeLabel.setForeground(new Color(51, 51, 51));
-//            }
-//        });
     }
 
     /**
@@ -229,7 +200,7 @@ public class Frame {
      */
     private void initGridPanel() {
         gridPanel = new JPanel();
-        gridPanel.setBounds(10, 10, 252, 502);
+        gridPanel.setBounds(10, 10, 254, 502);
         gridPanel.setBorder(new LineBorder(Color.WHITE, 2));
         gridPanel.setOpaque(false);
         gridPanel.setLayout(null);
@@ -242,13 +213,13 @@ public class Frame {
      */
     private void initGameGrid() {
         gameGrid = new JPanel[10][20];
-        int y = 1;
+        int y = 0;// y = 0 so that the tetrominoes do not clip into the border
         for (int i = 0; i < 20; i++) {
-            int x = 1;
+            int x = 2;// Same reason as y = 0
             for (int j = 0; j < 10; j++) {
                 gameGrid[j][i] = new JPanel();
                 gameGrid[j][i].setBounds(x, y, 25, 25);
-                gameGrid[j][i].setBackground(Color.WHITE);
+                gameGrid[j][i].setBackground(Color.BLACK);
                 gameGrid[j][i].setOpaque(false);
                 gridPanel.add(gameGrid[j][i]);
                 x += 25;
@@ -397,7 +368,7 @@ public class Frame {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                pauseLabel.setForeground(new Color(51, 51, 51));
+                pauseLabel.setForeground(Color.WHITE);
             }
         });
     }
@@ -560,7 +531,7 @@ public class Frame {
     private void updateCurrentBlock(boolean isNewBlock) {
         if (!isNewBlock) {
             for (int i = 0; i < 4; i++) {
-                gameGrid[game.getPreviousBlockPos()[i][0]][game.getPreviousBlockPos()[i][1]].setBackground(Color.WHITE);
+                gameGrid[game.getPreviousBlockPos()[i][0]][game.getPreviousBlockPos()[i][1]].setBackground(Color.BLACK);
                 gameGrid[game.getPreviousBlockPos()[i][0]][game.getPreviousBlockPos()[i][1]].setBorder(null);
                 gameGrid[game.getPreviousBlockPos()[i][0]][game.getPreviousBlockPos()[i][1]].setOpaque(false);
             }
@@ -571,8 +542,6 @@ public class Frame {
             gameGrid[game.getCurrentBlockPos()[i][0]][game.getCurrentBlockPos()[i][1]].setBorder(new LineBorder(Color.BLACK));
         }
     }
-
-    //endregion
 
     /**
      * keyListener
@@ -699,14 +668,14 @@ public class Frame {
     public void gameOverAnimation() {
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 10; j++) {
-                if (gameGrid[j][i].getBackground() != Color.WHITE) {
+                if (gameGrid[j][i].getBackground() != Color.BLACK) {
                     int green = ThreadLocalRandom.current().nextInt(150, 251);
                     int blue = ThreadLocalRandom.current().nextInt(85, 186);
                     gameGrid[j][i].setBackground(new Color(250, green, blue));
                     try {
                         Thread.sleep(25);
                     } catch (InterruptedException ignored) {}
-                    gameGrid[j][i].setBackground(Color.WHITE);
+                    gameGrid[j][i].setBackground(Color.BLACK);
                     gameGrid[j][i].setBorder(null);
                     gameGrid[j][i].setOpaque(false);
                 }
@@ -742,7 +711,7 @@ public class Frame {
                         game.removeFromSetBlocks(k);
                     }
                     //Remove from grid
-                    gameGrid[j][i].setBackground(Color.WHITE);
+                    gameGrid[j][i].setBackground(Color.BLACK);
                     gameGrid[j][i].setBorder(null);
                     gameGrid[j][i].setOpaque(false);
                 }
@@ -758,7 +727,7 @@ public class Frame {
                     //COPY
                     gridColors[k][j] = gameGrid[k][j].getBackground();
                     //REMOVE
-                    gameGrid[k][j].setBackground(Color.WHITE);
+                    gameGrid[k][j].setBackground(Color.BLACK);
                     gameGrid[k][j].setBorder(null);
                     gameGrid[k][j].setOpaque(false);
                 }
@@ -766,7 +735,7 @@ public class Frame {
             //Repaint colors
             for (int j = 0; j < i; j++) {
                 for (int k = 0; k < 10; k++) {
-                    if (gridColors[k][j] != Color.WHITE) {
+                    if (gridColors[k][j] != Color.BLACK) {
                         gameGrid[k][j + 1].setBackground(gridColors[k][j]);
                         gameGrid[k][j + 1].setBorder(new LineBorder(Color.BLACK));
                         gameGrid[k][j + 1].setOpaque(true);
@@ -778,7 +747,7 @@ public class Frame {
             //Add new setBlocks
             for (int j = 0; j < 20; j++) {
                 for (int k = 0; k < 10; k++) {
-                    if (gameGrid[k][j].getBackground() != Color.WHITE) {
+                    if (gameGrid[k][j].getBackground() != Color.BLACK) {
                         game.addToSetBlocks(new int[]{k, j});
                     }
                 }
@@ -794,7 +763,7 @@ public class Frame {
         if (!game.isHeldThisTurn()) {
             if (game.getCurrentHoldBlock() != -1) {
                 for (int i = 0; i < 4; i++) {
-                    gameGrid[game.getCurrentBlockPos()[i][0]][game.getCurrentBlockPos()[i][1]].setBackground(Color.WHITE);
+                    gameGrid[game.getCurrentBlockPos()[i][0]][game.getCurrentBlockPos()[i][1]].setBackground(Color.BLACK);
                     gameGrid[game.getCurrentBlockPos()[i][0]][game.getCurrentBlockPos()[i][1]].setBorder(null);
                     gameGrid[game.getCurrentBlockPos()[i][0]][game.getCurrentBlockPos()[i][1]].setOpaque(false);
                 }
@@ -807,7 +776,7 @@ public class Frame {
                 game.setCurrentHoldBlock(game.getCurrentBlockType());
                 updateHoldImage();
                 for (int i = 0; i < 4; i++) {
-                    gameGrid[game.getCurrentBlockPos()[i][0]][game.getCurrentBlockPos()[i][1]].setBackground(Color.WHITE);
+                    gameGrid[game.getCurrentBlockPos()[i][0]][game.getCurrentBlockPos()[i][1]].setBackground(Color.BLACK);
                     gameGrid[game.getCurrentBlockPos()[i][0]][game.getCurrentBlockPos()[i][1]].setBorder(null);
                     gameGrid[game.getCurrentBlockPos()[i][0]][game.getCurrentBlockPos()[i][1]].setOpaque(false);
                 }

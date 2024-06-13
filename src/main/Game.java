@@ -11,7 +11,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Class: main.Game
- * Author: Yannis Seimenis
  * Description: main.Game method is used to store game variables and control game logic.
  */
 
@@ -289,7 +288,7 @@ public class Game {
         int[][] rotateLoc = new int[4][2];
         int newBlockRotation = 0;
         switch (currentBlock.getBlockType()) {
-            case 0 -> {
+            case 0 -> {//Bar
                 if (currentBlock.getBlockRotation() == 0) {
                     rotateLoc[0][0] = currentBlock.getBlockLocation()[0][0] + 2;
                     rotateLoc[0][1] = currentBlock.getBlockLocation()[0][1] - 2;
@@ -311,7 +310,7 @@ public class Game {
                     rotateLoc[3][1] = currentBlock.getBlockLocation()[3][1] - 1;
                 }
             }
-            case 1 -> {
+            case 1 -> {//L1
                 if (currentBlock.getBlockRotation() == 0) {
                     rotateLoc[0][0] = currentBlock.getBlockLocation()[0][0] + 2;
                     rotateLoc[0][1] = currentBlock.getBlockLocation()[0][1];
@@ -353,7 +352,7 @@ public class Game {
                     rotateLoc[3][1] = currentBlock.getBlockLocation()[3][1] + 1;
                 }
             }
-            case 2 -> {
+            case 2 -> {//L2
                 if (currentBlock.getBlockRotation() == 0) {
                     rotateLoc[0][0] = currentBlock.getBlockLocation()[0][0];
                     rotateLoc[0][1] = currentBlock.getBlockLocation()[0][1] + 2;
@@ -395,7 +394,7 @@ public class Game {
                     rotateLoc[3][1] = currentBlock.getBlockLocation()[3][1] - 1;
                 }
             }
-            case 4 -> {
+            case 4 -> {//Z1
                 if (currentBlock.getBlockRotation() == 0) {
                     rotateLoc[0][0] = currentBlock.getBlockLocation()[0][0];
                     rotateLoc[0][1] = currentBlock.getBlockLocation()[0][1];
@@ -417,7 +416,7 @@ public class Game {
                     rotateLoc[3][1] = currentBlock.getBlockLocation()[3][1];
                 }
             }
-            case 5 -> {
+            case 5 -> {//T
                 if (currentBlock.getBlockRotation() == 0) {
                     rotateLoc[0][0] = currentBlock.getBlockLocation()[0][0];
                     rotateLoc[0][1] = currentBlock.getBlockLocation()[0][1];
@@ -459,7 +458,7 @@ public class Game {
                     rotateLoc[3][1] = currentBlock.getBlockLocation()[3][1] + 1;
                 }
             }
-            case 6 -> {
+            case 6 -> {//Z2
                 if (currentBlock.getBlockRotation() == 0) {
                     rotateLoc[0][0] = currentBlock.getBlockLocation()[0][0] + 1;
                     rotateLoc[0][1] = currentBlock.getBlockLocation()[0][1] + 2;
