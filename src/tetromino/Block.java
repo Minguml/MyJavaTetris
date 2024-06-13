@@ -1,5 +1,7 @@
 package tetromino;
 
+import main.Sound;
+
 import java.awt.*;
 
 
@@ -13,6 +15,8 @@ public class Block {
     public int blockRotation;
     public int[][] blockLocation;
     public Color blockColor;
+    private boolean paused;
+    private Sound sound = new Sound();
 
     /**
      * main.Block(int newBlockType)
@@ -23,7 +27,23 @@ public class Block {
         blockType = newBlockType;
         blockRotation = 0;
         setNewBlockLocationAndColor(newBlockType);
+        paused = false;
     }
+
+    public void hardDrop(int[][] board) {
+        if (!paused) {
+            while (canMoveDown(board)) {
+                for (int i = 0; i < 4; i++) {
+                    blockLocation[i][1]++;
+                }
+            }
+            // Play sound after the block has been hard dropped
+            sound.setFile(1);
+            sound.play();
+        }
+    }
+
+
 
     /**
      * setNewBlockLocationAndColor(int newBlockType)
@@ -87,13 +107,29 @@ public class Block {
 
     //region Move main.Block Methods
 
+    private boolean canMoveDown(int[][] board) {
+        for (int i = 0; i < 4; i++) {
+            int x = blockLocation[i][0];
+            int y = blockLocation[i][1] + 1;
+            if (y >= board[0].length || board[x][y] != 0) {
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+
+
     /**
      * moveBlockDown()
      * Moves the block location down
      */
     public void moveBlockDown() {
-        for (int i = 0; i < 4; i++) {
-            blockLocation[i][1]++;
+        if (!paused) {
+            for (int i = 0; i < 4; i++) {
+                blockLocation[i][1]++;
+            }
         }
     }
 
@@ -102,8 +138,10 @@ public class Block {
      * Moves the block location left
      */
     public void moveBlockLeft() {
-        for (int i = 0; i < 4; i++) {
-            blockLocation[i][0]--;
+        if (!paused) {
+            for (int i = 0; i < 4; i++) {
+                blockLocation[i][0]--;
+            }
         }
     }
 
@@ -112,8 +150,10 @@ public class Block {
      * Moves the blocks location right
      */
     public void moveBlockRight() {
-        for (int i = 0; i < 4; i++) {
-            blockLocation[i][0]++;
+        if (!paused) {
+            for (int i = 0; i < 4; i++) {
+                blockLocation[i][0]++;
+            }
         }
     }
 
